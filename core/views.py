@@ -1,14 +1,18 @@
 import requests
+
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+
+from .models import Place
 
 
-def get_weather(request):
+def place_detail(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
 
     url = 'https://community-open-weather-map.p.rapidapi.com/find'
 
     querystring = {
-        'q': 'Tbilisi',
+        'q': place.name,
         'cnt': '1',
         'mode': 'null',
         'lon': '0',
@@ -27,12 +31,11 @@ def get_weather(request):
     )
 
     data = response.json()
-    place = data['list'][0]
-    name = place['name']
-    temperature = place['main']['temp']
+    name = data['list'][0]['name']
+    temperature = data['list'][0]['main']['temp']
 
     return render(
         request,
-        'get_weather.html',
+        'place_detail.html',
         {'name': name, 'temperature': temperature}
     )
