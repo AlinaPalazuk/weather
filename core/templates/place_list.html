@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Weather</h1>
+<ul>
+  {% for place in places %}
+  <li><a href="{{ place.get_absolute_url }}">{{ place.name }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
